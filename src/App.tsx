@@ -1,55 +1,123 @@
-import logo from "./logo.svg"
-import { Counter } from "./features/counter/Counter"
-import "./App.css"
+import { useEffect, useState } from "react"
+import client from "./axiosClient"
+import TableComponent from "./features/table/TableComponent"
+import { Character } from "./features/table/columns"
+
+// const defaultData: Character[] = [
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Rick Sanchez",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+//   {
+//     id: 1,
+//     name: "Ricky asd",
+//     status: "Alive",
+//     species: "Human",
+//     details: 1,
+//   },
+// ]
 
 function App() {
+  const [data, setData] = useState<Character[]>([])
+  const [page, setPage] = useState<number>(1)
+  useEffect(() => {
+    client.get(`/?page=${page}`).then((res) => setData(res.data.results))
+  }, [page])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <TableComponent tableData={data} />
+      <button onClick={(e) => (page > 0 ? setPage(page - 1) : null)}>
+        Prev Page
+      </button>{" "}
+      {page} <button onClick={(e) => setPage(page + 1)}>Next Page</button>
     </div>
   )
 }
