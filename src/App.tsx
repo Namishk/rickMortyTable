@@ -1,39 +1,40 @@
-import { useEffect, useState } from "react"
-import client from "./axiosClient"
+import { useState } from "react"
+import CharacterTable from "./components/table/CharacterTable"
 import TableComponent from "./components/table/TableComponent"
-import { Character } from "./components/table/columns"
-import Modal from "./components/Modal"
-import { useAppDispatch } from "./app/hooks"
-import { closeDetailsDialog } from "./features/details/detailsSlice"
 import { useSelector } from "react-redux"
 import { RootState } from "./app/store"
+import FavouriteTable from "./components/table/FavouriteTable"
 
+export enum TableState {
+  character = "character",
+  favourite = "favourite",
+}
 function App() {
-  const [data, setData] = useState<Character[]>([])
-  const [page, setPage] = useState<number>(1)
-  useEffect(() => {
-    client.get(`/?page=${page}`).then((res) => setData(res.data.results))
-  }, [page])
-  const dispatch = useAppDispatch()
-  let modalOpen = useSelector((state: RootState) => state.details.ModalOpen)
-  console.log(modalOpen)
+  const [tableState, setTableState] = useState<TableState>(TableState.character)
+
+  const favouriteCharacterData = useSelector(
+    (state: RootState) => state.favourite.favourites,
+  )
   return (
     <div className="App">
-      <TableComponent tableData={data} />
-      <button onClick={(e) => (page > 1 ? setPage(page - 1) : null)}>
-        Prev Page
-      </button>{" "}
-      {page} <button onClick={(e) => setPage(page + 1)}>Next Page</button>
-      {modalOpen && (
-        <Modal>
-          <button
-            onClick={() => {
-              dispatch(closeDetailsDialog())
-            }}
-          >
-            CLOSE
-          </button>
-        </Modal>
+      <div className="flex justify-center mt-10 gap-3">
+        <button
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+          onClick={(e) => setTableState(TableState.character)}
+        >
+          Character Table
+        </button>
+        <button
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+          onClick={(e) => setTableState(TableState.favourite)}
+        >
+          Favourite Table
+        </button>
+      </div>
+      {tableState === TableState.character ? (
+        <CharacterTable />
+      ) : (
+        <FavouriteTable />
       )}
     </div>
   )
