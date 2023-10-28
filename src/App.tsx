@@ -19,13 +19,17 @@ function App() {
     <div className="App">
       <div className="flex justify-center mt-10 gap-3">
         <button
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+          className={`bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l ${
+            tableState === TableState.character ? "bg-gray-400" : ""
+          }`}
           onClick={(e) => setTableState(TableState.character)}
         >
           Character Table
         </button>
         <button
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
+          className={`bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l ${
+            tableState === TableState.favourite ? "bg-gray-400" : ""
+          }`}
           onClick={(e) => setTableState(TableState.favourite)}
         >
           Favourite Table
